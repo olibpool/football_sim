@@ -1,0 +1,9 @@
+GOAL - 'use iteration and conditionals to create an ongoing program'
+- need to create a program that continues until the user exits.
+- should be launched from a single .py file.
+
+DELIVERABLES: 
+- flowchart
+- repo
+- repo needs to contain a readme explaining what the program does
+and any other features to add in the future.
