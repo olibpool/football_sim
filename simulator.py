@@ -1,4 +1,5 @@
 import random
+from itertools import permutations
 
 leagues = {
     'Premier League': ['Arsenal','Aston Villa','Brighton and Hove Albion','Burnley','Chelsea','Crystal Palace','Everton','Fulham','Leeds United','Liverpool','Leicester City','Manchester City','Manchester United','Newcastle United','Sheffield United','Southampton','Tottenham Hotspur','West Bromwich Albion','West Ham United','Wolverhampton Wanderers'],
@@ -21,6 +22,21 @@ def stat_generator(league):
         stat = 10
         
     return stat
+
+def investment(money_left, ):
+    print(f'You have {money_left} avaliable to spend, how much to you want to invest?')
+    money_input_num = int(input('Please input your amount: '))
+    print()
+    
+    while not 0 <= money_input_num <= money_left:
+        print(f'Error! Please input a number from 0 to {money_left} (inclusive)')
+        print()
+        moeny_input_num = int(input('Please input your amount: '))
+        print()
+        
+    
+        
+    
     
 class team:
     def __init__(self, league):
@@ -63,7 +79,7 @@ while run_sim:
     while player_team not in chosen_league_teams:
         print('Error! Please input a team in the list of teams in your chosen league!')
         print()
-        league_input_num = input('Please input your choice: ')
+        player_team = input('Please input your choice: ')
         print()
         
     print('================================================================')
@@ -75,14 +91,33 @@ while run_sim:
     print("These are your team's stats, they are ranked out of 100 each, where the higher the number the better.")
     print('These individual stats are then added together to give an overall rating for your team.\n')
     
-    team_stats = team(league_input_num-1)
+    # Generate the rest of the teams stats in the league.
+    league_stats = {team_name: team(league_input_num-1) for team_name in chosen_league_teams}
+    # Select the stats for our team
+    team_stats = league_stats[player_team]
     
     print(f"Manager: {team_stats.manager}\nSquad: {team_stats.squad}\nFacilities: {team_stats.facilities}\nTotal: {team_stats.total}\n")
     
+    print('For reference the average total rating for your league is:', 3 * league_averages[league_input_num-1], '\n')
+    
     print('================================================================')
-    print('For reference the average total rating for your league would be:', 3 * league_averages[league_input_num-1])
     
     
+    total_fixtures_list = list(permutations(chosen_league_teams, 2))
     
+    print(total_fixtures_list)
+    
+    fix_dict = {}
+    for matchday in range(len(chosen_league_teams) - 1):
+        fix_dict[matchday] = []
+        
+        for first_team in random.sample(chosen_league_teams, int(len(chosen_league_teams) / 2)):
+            fixture = random.choice([fix for fix in total_fixtures_list if first_team in fix])                                    
+            fix_dict[matchday].append(fixture)
+            total_fixtures_list.remove(fixture)
+            
+    print(fix_dict)
+        
+        
     
     run_sim = False
