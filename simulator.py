@@ -9,9 +9,9 @@ leagues = {
 
 league_choice = {1: 'Premier League', 2: 'Championship', 3: 'League 1', 4: 'League 2'}
 
-league_averages = [80, 60, 40, 20]
-team_variation = 10
-match_variation = 3
+league_averages = [80, 70, 60, 50]
+team_variation = 3
+match_variation = 10
 score_weights = [10, 5, 2, 1] # 1 goal, 2, 3, 4
 
 def stat_generator(league):
@@ -232,6 +232,6 @@ while playing:
         
     print("\nThanks for playing, do you want to play again? If so hit enter, if not type 'X'")
     
-    if input() == 'X':
+    if input().upper() == 'X':
         playing = False
 
