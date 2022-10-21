@@ -1,5 +1,4 @@
 import random
-from itertools import permutations
 
 leagues = {
     'Premier League': ['Arsenal','Aston Villa','Brighton and Hove Albion','Burnley','Chelsea','Crystal Palace','Everton','Fulham','Leeds United','Liverpool','Leicester City','Manchester City','Manchester United','Newcastle United','Sheffield United','Southampton','Tottenham Hotspur','West Bromwich Albion','West Ham United','Wolverhampton Wanderers'],
@@ -12,7 +11,7 @@ league_choice = {1: 'Premier League', 2: 'Championship', 3: 'League 1', 4: 'Leag
 
 league_averages = [80, 60, 40, 20]
 team_variation = 10
-match_variation = 5
+match_variation = 3
 score_weights = [10, 5, 2, 1] # 1 goal, 2, 3, 4
 
 def stat_generator(league):
@@ -36,7 +35,7 @@ def investment(money_left, ):
         moeny_input_num = int(input('Please input your amount: '))
         print()
 
-def matchday_sim(matchday_num, fix_list, league_table, league_stats):
+def matchday_sim(matchday_num, fix_list, league_table, league_stats, player_team):
     results = f''
     for fix in fix_list[matchday_num]:
         team1, team2 = fix[0], fix[1]
@@ -68,7 +67,10 @@ def matchday_sim(matchday_num, fix_list, league_table, league_stats):
             league_table[team1] += 0
             league_table[team2] += 3
             
-        results += f"{team1} v {team2} : {team1_score} - {team2_score}\n"
+        if player_team in [team1, team2]:
+            results += f"{team1} v {team2} : {team1_score} - {team2_score}  <------ YOUR TEAM\n"
+        else:
+            results += f"{team1} v {team2} : {team1_score} - {team2_score}\n"
     
     return results
     
@@ -154,45 +156,82 @@ for fixture in range(1, len(chosen_league_teams)):
     matches = []
     return_matches = []
 
-
-"""
-total_fixtures_list = list(permutations(chosen_league_teams, 2))
-
-for matchday in range(len(chosen_league_teams)*2 - 2):
-    fix_dict[matchday] = []
-    teams_used = []
-    
-    for first_team in chosen_league_teams:
-        
-        if first_team not in teams_used:
-            print([fix for fix in total_fixtures_list if first_team in fix])
-            fixture = random.choice([fix for fix in total_fixtures_list if first_team in fix])
-            while fixture[0] in teams_used or fixture[1] in teams_used:
-                fixture = random.choice([fix for fix in total_fixtures_list if first_team in fix])
-                print(first_team)
-
-            fix_dict[matchday].append(fixture)
-            teams_used += [fixture[0], fixture[1]]
-            total_fixtures_list.remove(fixture)
-"""
-    
         
 # Initialise league table:
 table = {team_name: 0 for team_name in chosen_league_teams}
-
 
 print('Ready for the league to start??')
 print()
 input('Press any button to simulate the first matchday of the season!\n')
 
-for matchday in range(1, len(chosen_league_teams)*2 - 1):
+playing = True
+while playing:
+    
+    for matchday in range(1, len(chosen_league_teams)*2 - 1):
+        print('================================================================')
+        print(f'Matchday {matchday}\n')
+        print('The results for this matchday are: ')
+        
+        res = matchday_sim(matchday - 1, fixtures, table, league_stats, player_team)
+        
+        print(res)
+        
+        user_choice = input('Hit enter to go to the next matchday, or input L to see the league table or X to exit:\n')
+        
+        if user_choice.upper() not in ['L', 'X']:
+            continue
+        elif user_choice.upper() == 'L':
+            print()
+            print('The league table is as follows: \n')
+            counter = 1
+            
+            for name, points in sorted(table.items(), key=lambda item: item[1], reverse=True):
+                print(f'{counter}. {name} - {points} points.')
+                counter += 1
+            
+            input('\nHit enter to go to the next matchday.\n')
+        else:
+            exit()
+    
     print('================================================================')
-    print(f'Matchday {matchday}\n')
-    print('The results for this matchday are: ')
+    print('================================================================')
+    print('================================================================')
     
-    res = matchday_sim(matchday - 1, fixtures, table, league_stats)
+    counter = 1
+    postion = 1
+    for name, points in sorted(table.items(), key=lambda item: item[1], reverse=True):
+        if name == player_team:
+            position = counter
+            break
+        counter += 1
+        
+    if position not in [1, 2, 3, 21, 22, 23]:
+        position_string = f'{position}th'
+    elif position == 1:
+            position_string = f'1st'
+    elif position == 2:
+            position_string = f'2nd'
+    elif position == 3:
+            position_string = f'3rd'
+    elif position == 21:
+            position_string = f'21st'
+    elif position == 22:
+            position_string = f'22nd'
+    elif position == 23:
+            position_string = f'23rd'
     
-    print(res)
+    print(f'The season is now over, your team {player_team} finished in {position_string} position.\n')
+    print("The final league standings are as follows: \n")
     
-    input()
+    print('The league table is as follows: \n')
+    counter = 1
+    
+    for name, points in sorted(table.items(), key=lambda item: item[1], reverse=True):
+        print(f'{counter}. {name} - {points} points.')
+        counter += 1
+        
+    print("\nThanks for playing, do you want to play again? If so hit enter, if not type 'X'")
+    
+    if input() == 'X':
+        playing = False
 
