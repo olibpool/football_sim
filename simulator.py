@@ -117,56 +117,59 @@ while player_team not in chosen_league_teams:
     player_team = input('Please input your choice: ')
     print()
     
-print('================================================================')
-if player_team != 'Preston North End':
-    print(f'A great choice, you chose: {player_team} :)\n')
-else:
-    print('I cannot believe you chose them, you have poor taste in football teams for sure.\n')
-    
-print("These are your team's stats, they are ranked out of 100 each, where the higher the number the better.")
-print('These individual stats are then added together to give an overall rating for your team.\n')
 
-# Generate the rest of the teams stats in the league.
-league_stats = {team_name: team(league_input_num-1) for team_name in chosen_league_teams}
-# Select the stats for our team
-team_stats = league_stats[player_team]
-
-print(f"Manager: {team_stats.manager}\nSquad: {team_stats.squad}\nFacilities: {team_stats.facilities}\nTotal: {team_stats.total}\n")
-
-print('For reference the average total rating for your league is:', 3 * league_averages[league_input_num-1], '\n')
-
-print('================================================================')
-
-# This piece of code generates the fixture list.
-teams = random.sample(chosen_league_teams, len(chosen_league_teams))
-
-matches = []
-return_matches = []
-fixtures = []
-
-for fixture in range(1, len(chosen_league_teams)):
-
-    for i in range(int(len(chosen_league_teams)/2)):
-        matches.append((teams[i], teams[len(chosen_league_teams) - 1 - i]))
-        return_matches.append((teams[len(chosen_league_teams) - 1 - i], teams[i]))
-        
-    teams.insert(1, teams.pop())
-    fixtures.insert(int(len(fixtures)/2), matches)
-    fixtures.append(return_matches)
-    matches = []
-    return_matches = []
-
-        
-# Initialise league table:
-table = {team_name: 0 for team_name in chosen_league_teams}
-
-print('Ready for the league to start??')
-print()
-input('Press any button to simulate the first matchday of the season!\n')
 
 playing = True
 while playing:
     
+    print('================================================================')
+        
+    if player_team != 'Preston North End':
+        print(f'A great choice, you chose: {player_team} :)\n')
+    else:
+        print('I cannot believe you chose them, you have poor taste in football teams for sure.\n')
+        
+    print("These are your team's stats, they are ranked out of 100 each, where the higher the number the better.")
+    print('These individual stats are then added together to give an overall rating for your team.\n')
+
+    # Generate the rest of the teams stats in the league.
+    league_stats = {team_name: team(league_input_num-1) for team_name in chosen_league_teams}
+    # Select the stats for our team
+    team_stats = league_stats[player_team]
+
+    print(f"Manager: {team_stats.manager}\nSquad: {team_stats.squad}\nFacilities: {team_stats.facilities}\nTotal: {team_stats.total}\n")
+
+    print('For reference the average total rating for your league is:', 3 * league_averages[league_input_num-1], '\n')
+
+    print('================================================================')
+
+    # This piece of code generates the fixture list.
+    teams = random.sample(chosen_league_teams, len(chosen_league_teams))
+
+    matches = []
+    return_matches = []
+    fixtures = []
+
+    for fixture in range(1, len(chosen_league_teams)):
+
+        for i in range(int(len(chosen_league_teams)/2)):
+            matches.append((teams[i], teams[len(chosen_league_teams) - 1 - i]))
+            return_matches.append((teams[len(chosen_league_teams) - 1 - i], teams[i]))
+            
+        teams.insert(1, teams.pop())
+        fixtures.insert(int(len(fixtures)/2), matches)
+        fixtures.append(return_matches)
+        matches = []
+        return_matches = []
+
+            
+    # Initialise league table:
+    table = {team_name: 0 for team_name in chosen_league_teams}
+
+    print('Ready for the league to start??')
+    print()
+    input('Press any button to simulate the first matchday of the season!\n')
+ 
     for matchday in range(1, len(chosen_league_teams)*2 - 1):
         print('================================================================')
         print(f'Matchday {matchday}\n')
